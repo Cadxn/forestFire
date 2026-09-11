@@ -4,7 +4,7 @@
 
 void printForest(int **numbers, int rows, int cols){
     for(int i = 0; i < rows; i++){
-        printf("%d |", i);
+        printf("%d |", i+1);
         for(int j = 0; j < cols; j++){
             //printf("%d |", j);
             if(numbers[i][j] == 0){
@@ -16,8 +16,15 @@ void printForest(int **numbers, int rows, int cols){
                 printf("F"); 
             }
         }
-        printf("| %d", i);
+        printf("| %d", i+1);
         printf("\n");
+    }
+}
+void populateForest(int **numbers, int rows, int cols){
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            numbers[i][j] = 1;
+        }
     }
 }
 
@@ -35,22 +42,22 @@ int main(){
     } else {
         printf("File opened successfully.\n");
     }
-    char data[100];
-    fgets(data, 50, file);
 
-    rows = atoi(data);
-    printf("%d", rows);
-    cols = atoi(data+1);
-    printf("%d", cols);
-    
+    fscanf(file, "%d", &rows);
+    fscanf(file, "%d", &cols);
+    fscanf(file, "%d", &seed);
+    fscanf(file, "%d", &probability);
+
+    printf("%d\n", rows);
+    printf("%d\n", cols);
+    printf("%d\n", seed);
+    printf("%d\n", probability);
 
     /*for(int i = 0; i < 4; i ++){
         printf("%s", sscanf(data, "%d"));
         }*/
-    
-    
-        free(file);
 
+    /*
     printf("rows: ");
     scanf("%d", &rows);
     printf("%d", rows);
@@ -58,6 +65,7 @@ int main(){
     printf("%d", rows);
     printf("cols: ");
     scanf("%d", &cols);
+    */
 
     //Creates the 2d Array with dyanimic memory allocation
     int **numbers = (int **)malloc(rows * sizeof(int *));
@@ -65,20 +73,49 @@ int main(){
         numbers[i] = (int *)malloc(cols * sizeof(int));
     }
 
+    char type = 'O';
+    int i, j;
+    while(type != 'Q'){
 
+        fscanf(file, "%c", &type);
+        if(type == 'E'){
+            fscanf(file, "%d", &i);
+            fscanf(file, "%d", &j);
+            numbers[i][j] = 0;
+        }
+        else if(type == 'T'){
+            fscanf(file, "%d", &i);
+            fscanf(file, "%d", &j);
+            numbers[i][j] = 1;
+        } else if (type == 'F'){
+            fscanf(file, "%d", &i);
+            fscanf(file, "%d", &j);
+            numbers[i][j] = 2;
+
+        }else if(type == 'A'){
+            populateForest(numbers, rows, cols);
+        }
+        printf("%c %d %d\n", type, i, j);
+    }
+
+
+    /*
     printf("seed: ");
     scanf("%d", &seed);
     if(seed < 0 ) {return 0;}
     printf("probability: ");
     scanf("%d", &probability);
     if(probability < 0) {return 0;}
+    */
 
     srand(seed);
 
+    printf("Forest:\n");
     printForest(numbers, rows, cols);
     
     
     free(numbers);
+    fclose(file);
     return 0;
 
 }
