@@ -75,27 +75,29 @@ int main(){
 
     char type = 'O';
     int i, j;
-    while(type != 'Q'){
-
-        fscanf(file, "%c", &type);
+    while(1){
+        fscanf(file, " %c", &type);
+        //printf("Type: %c\n", type);
+        if(type == 'Q'){
+            break;
+        }
         if(type == 'E'){
             fscanf(file, "%d", &i);
             fscanf(file, "%d", &j);
-            numbers[i][j] = 0;
+            numbers[i-1][j-1] = 0;
         }
         else if(type == 'T'){
             fscanf(file, "%d", &i);
             fscanf(file, "%d", &j);
-            numbers[i][j] = 1;
+            numbers[i-1][j-1] = 1;
         } else if (type == 'F'){
             fscanf(file, "%d", &i);
             fscanf(file, "%d", &j);
-            numbers[i][j] = 2;
+            numbers[i-1][j-1] = 2;
 
         }else if(type == 'A'){
             populateForest(numbers, rows, cols);
         }
-        printf("%c %d %d\n", type, i, j);
     }
 
 
@@ -110,7 +112,6 @@ int main(){
 
     srand(seed);
 
-    printf("Forest:\n");
     printForest(numbers, rows, cols);
     
     
