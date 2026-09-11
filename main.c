@@ -2,9 +2,51 @@
 #include <stdlib.h>
 #include <math.h>
 
+void printForest(int **numbers, int rows, int cols){
+    for(int i = 0; i < rows; i++){
+        printf("%d |", i);
+        for(int j = 0; j < cols; j++){
+            //printf("%d |", j);
+            if(numbers[i][j] == 0){
+                printf("."); 
+            } else if(numbers[i][j] == 1){
+                printf("T"); 
+            }
+            else if(numbers[i][j] == 2){
+                printf("F"); 
+            }
+        }
+        printf("| %d", i);
+        printf("\n");
+    }
+}
+
 int main(){
     //srand(time(NULL));
     int rows, cols, seed, probability; 
+    FILE *file;
+    char filename[100];
+    scanf("%s", filename);
+
+    file = fopen(filename, "r");
+    if(file == NULL) {
+        printf("Error opening file.\n");
+        return 1;
+    } else {
+        printf("File opened successfully.\n");
+    }
+    char data[100];
+
+    while (fgets(data, 50, file) != NULL) {
+        printf("%d", data);
+    }
+
+    for(int i = 0; i < 4; i ++){
+        printf("%d ", sscanf(data, "%d"));
+        }
+    
+    
+        free(file);
 
     printf("rows: ");
     scanf("%d", &rows);
@@ -30,23 +72,8 @@ int main(){
 
     srand(seed);
 
-
-    for(int i = 0; i < rows; i++){
-        printf("%d |", i);
-        for(int j = 0; j < cols; j++){
-            //printf("%d |", j);
-            if(numbers[i][j] == 0){
-                printf("."); 
-            } else if(numbers[i][j] == 1){
-                printf("T"); 
-            }
-            else if(numbers[i][j] == 2){
-                printf("F"); 
-            }
-        }
-        printf("| %d", i);
-        printf("\n");
-    }
+    printForest(numbers, rows, cols);
+    
     
     free(numbers);
     return 0;
