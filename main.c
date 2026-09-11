@@ -36,14 +36,17 @@ int main(){
         printf("File opened successfully.\n");
     }
     char data[100];
+    fgets(data, 50, file);
 
-    while (fgets(data, 50, file) != NULL) {
-        printf("%d", data);
-    }
+    rows = atoi(data);
+    printf("%d", rows);
+    cols = atoi(data+1);
+    printf("%d", cols);
+    
 
-    for(int i = 0; i < 4; i ++){
-        printf("%d ", sscanf(data, "%d"));
-        }
+    /*for(int i = 0; i < 4; i ++){
+        printf("%s", sscanf(data, "%d"));
+        }*/
     
     
         free(file);
