@@ -91,7 +91,7 @@ void **nextGeneration(int ** numbers, int rows, int cols, float probability){
                 //Top
                 if((i != 0) && (numbers[i-1][j] == 1)){
                     printf("Top%d", i-1);
-                    //rn = (float)rand()/(float)RAND_MAX;
+                    rn = (float)rand()/(float)RAND_MAX;
                     if(rn <= probability){
                         newNumbers[i-1][j] = 2;
                     } else{
@@ -138,6 +138,7 @@ void **nextGeneration(int ** numbers, int rows, int cols, float probability){
         }
     }
     free(newNumbers);
+    return numbers;
 }
 void populateForest(int **numbers, int rows, int cols){
     for(int i = 0; i < rows; i++){
