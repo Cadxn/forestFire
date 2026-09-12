@@ -3,10 +3,37 @@
 #include <math.h>
 
 void printForest(int **numbers, int rows, int cols){
+    //Prints the 10's digit first everytime there is a 10 milestone
+    printf("   ");
+    for(int i = 0; i < cols; i++){
+        if((((i+1)%10) == 0) && i != 0){
+            printf("%d", (i+1)/10);
+        } else{
+            printf(" ");
+        }
+    } printf("\n   ");
+
+    //Prints the 1's digit of the column numbers on the top
+    for(int i = 0; i < cols; i++){
+        if((((i+1)%10) == 0) && ((i+1) != 0)){
+            printf("0");
+        } else if (i >= 10){
+            printf("%d", (i%10)+1);
+        } else{
+            printf("%d", i+1);
+        }
+    } printf("\n  +");
+
+    //Prints the top border of the forest
+    for(int i = 0; i < cols; i++){
+        printf("-");
+    } printf("+");
+    
+    printf("\n");
+    //Prints the forest
     for(int i = 0; i < rows; i++){
         printf("%d |", i+1);
         for(int j = 0; j < cols; j++){
-            //printf("%d |", j);
             if(numbers[i][j] == 0){
                 printf("."); 
             } else if(numbers[i][j] == 1){
@@ -18,6 +45,32 @@ void printForest(int **numbers, int rows, int cols){
         }
         printf("| %d", i+1);
         printf("\n");
+    }   
+
+    //Prints the bottom border of the forest
+    printf("  +");
+    for(int i = 0; i < cols; i++){
+        printf("-");
+    } printf("+\n   ");  
+
+    //Prints the 1's digit of the column numbers on the bottom
+    for(int i = 0; i < cols; i++){
+        if((((i+1)%10) == 0) && ((i+1) != 0)){
+            printf("0");
+        } else if (i >= 10){
+            printf("%d", (i%10)+1);
+        } else{
+            printf("%d", i+1);
+        }
+    } printf("\n   ");
+    
+     //Prints the 10's digit first everytime there is a 10 milestone
+    for(int i = 0; i < cols; i++){
+        if((((i+1)%10) == 0) && i != 0){
+            printf("%d", (i+1)/10);
+        } else{
+            printf(" ");
+        }
     }
 }
 void populateForest(int **numbers, int rows, int cols){
@@ -48,24 +101,10 @@ int main(){
     fscanf(file, "%d", &seed);
     fscanf(file, "%d", &probability);
 
-    printf("%d\n", rows);
-    printf("%d\n", cols);
-    printf("%d\n", seed);
-    printf("%d\n", probability);
-
-    /*for(int i = 0; i < 4; i ++){
-        printf("%s", sscanf(data, "%d"));
-        }*/
-
-    /*
-    printf("rows: ");
-    scanf("%d", &rows);
-    printf("%d", rows);
-    //if(rows != %d) {return 0;};
-    printf("%d", rows);
-    printf("cols: ");
-    scanf("%d", &cols);
-    */
+    printf("rows: %d\n", rows);
+    printf("cols: %d\n", cols);
+    printf("seed: %d\n", seed);
+    printf("probability: %d\n", probability);
 
     //Creates the 2d Array with dyanimic memory allocation
     int **numbers = (int **)malloc(rows * sizeof(int *));
