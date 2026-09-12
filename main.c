@@ -236,6 +236,7 @@ int main(){
     
     
     free(numbers);
+    pause();
     return 0;
 
 }
