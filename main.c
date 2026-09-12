@@ -63,7 +63,7 @@ void printForest(int **numbers, int rows, int cols){
             printf("%d", i+1);
         }
     } printf("\n   ");
-    
+
      //Prints the 10's digit first everytime there is a 10 milestone
     for(int i = 0; i < cols; i++){
         if((((i+1)%10) == 0) && i != 0){
@@ -73,6 +73,72 @@ void printForest(int **numbers, int rows, int cols){
         }
     }
 }
+void **nextGeneration(int ** numbers, int rows, int cols, float probability){
+    int **newNumbers = (int **)malloc(rows * sizeof(int *));
+    for(int i = 0; i < rows; i++){
+        newNumbers[i] = (int *)malloc(cols * sizeof(int));
+    }
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            if(numbers[i][j] == 0){
+                newNumbers[i][j] = 0;
+            } else if(numbers[i][j] == 1){
+                if(newNumbers[i][j] != 2){
+                    newNumbers[i][j] = 1;
+                }
+            } else if(numbers[i][j] == 2){
+                float rn = (float)rand()/(float)RAND_MAX;
+                //Top
+                if((i != 0) && (numbers[i-1][j] == 1)){
+                    printf("Top%d", i-1);
+                    //rn = (float)rand()/(float)RAND_MAX;
+                    if(rn <= probability){
+                        newNumbers[i-1][j] = 2;
+                    } else{
+                        newNumbers[i-1][j] = 1;
+                    }
+                } 
+                //Bottom
+                if((i+1 != rows) && (numbers[i+1][j] == 1)){
+                    rn = (float)rand()/(float)RAND_MAX;
+                    printf("Bottom%d", i+1);
+                    if(rn <= probability){
+                        newNumbers[i+1][j] = 2;
+                    } else{
+                        newNumbers[i+1][j] = 1;
+                    }
+                }  
+                //Left
+                if((j != 0) && (numbers[i][j-1] == 1)){
+                    rn = (float)rand()/(float)RAND_MAX;
+                    printf("LLeft%d", j-1 );
+                    if(rn <= probability){
+                        newNumbers[i][j-1] = 2;
+                    } else{
+                        newNumbers[i][j-1] = 1;
+                    }
+                } 
+                //Right
+                if((j+1 != cols) && (numbers[i][j+1] == 1)){
+                    printf("Right%d", j+1);
+                    rn = (float)rand()/(float)RAND_MAX;
+                    if(rn <= probability){
+                        newNumbers[i][j+1] = 2;
+                    } else{
+                        newNumbers[i][j+1] = 1;
+                    }
+                }
+                newNumbers[i][j] = 0;
+            }
+        }
+    }
+    for (int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            numbers[i][j] = newNumbers[i][j];
+        }
+    }
+    free(newNumbers);
+}
 void populateForest(int **numbers, int rows, int cols){
     for(int i = 0; i < rows; i++){
         for(int j = 0; j < cols; j++){
@@ -80,10 +146,14 @@ void populateForest(int **numbers, int rows, int cols){
         }
     }
 }
+void pause(){
+    printf("<press return to continue>");
+    getchar();
+}
 
 int main(){
     //srand(time(NULL));
-    int rows, cols, seed, probability; 
+    int rows, cols, seed, probability, time = 0, count = 1, generation = 0; 
     FILE *file;
     char filename[100];
     scanf("%s", filename);
@@ -139,23 +209,32 @@ int main(){
         }
     }
 
-
-    /*
-    printf("seed: ");
-    scanf("%d", &seed);
-    if(seed < 0 ) {return 0;}
-    printf("probability: ");
-    scanf("%d", &probability);
-    if(probability < 0) {return 0;}
-    */
-
+    fclose(file);
     srand(seed);
 
+    double prob = (double)probability / 100.0;
+
     printForest(numbers, rows, cols);
+    while(count != 0){
+        count = 0;
+        nextGeneration(numbers, rows, cols, prob);
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                if(numbers[i][j] == 2){
+                    count++;
+                }
+            }
+            printf("\n Count: %d\n", count);
+        }
+        generation++;
+        printForest(numbers, rows, cols);
+        //pause();
+
+    }
+    
     
     
     free(numbers);
-    fclose(file);
     return 0;
 
 }
