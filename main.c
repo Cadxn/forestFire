@@ -157,6 +157,8 @@ int main(){
     int rows, cols, seed, probability, time = 0, count = 1, generation = 0, totalTree, totalBurned; 
     FILE *file;
     char filename[100];
+    
+    printf("Enter the filename: ");
     scanf("%s", filename);
 
     file = fopen(filename, "r");
