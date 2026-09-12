@@ -90,7 +90,7 @@ void **nextGeneration(int ** numbers, int rows, int cols, float probability){
                 float rn = (float)rand()/(float)RAND_MAX;
                 //Top
                 if((i != 0) && (numbers[i-1][j] == 1)){
-                    printf("Top%d", i-1);
+                    //printf("Top%d", i-1);
                     rn = (float)rand()/(float)RAND_MAX;
                     if(rn <= probability){
                         newNumbers[i-1][j] = 2;
@@ -101,7 +101,7 @@ void **nextGeneration(int ** numbers, int rows, int cols, float probability){
                 //Bottom
                 if((i+1 != rows) && (numbers[i+1][j] == 1)){
                     rn = (float)rand()/(float)RAND_MAX;
-                    printf("Bottom%d", i+1);
+                    //printf("Bottom%d", i+1);
                     if(rn <= probability){
                         newNumbers[i+1][j] = 2;
                     } else{
@@ -111,7 +111,7 @@ void **nextGeneration(int ** numbers, int rows, int cols, float probability){
                 //Left
                 if((j != 0) && (numbers[i][j-1] == 1)){
                     rn = (float)rand()/(float)RAND_MAX;
-                    printf("LLeft%d", j-1 );
+                    //printf("LLeft%d", j-1 );
                     if(rn <= probability){
                         newNumbers[i][j-1] = 2;
                     } else{
@@ -120,7 +120,7 @@ void **nextGeneration(int ** numbers, int rows, int cols, float probability){
                 } 
                 //Right
                 if((j+1 != cols) && (numbers[i][j+1] == 1)){
-                    printf("Right%d", j+1);
+                    //printf("Right%d", j+1);
                     rn = (float)rand()/(float)RAND_MAX;
                     if(rn <= probability){
                         newNumbers[i][j+1] = 2;
@@ -154,7 +154,7 @@ void pause(){
 
 int main(){
     //srand(time(NULL));
-    int rows, cols, seed, probability, time = 0, count = 1, generation = 0; 
+    int rows, cols, seed, probability, time = 0, count = 1, generation = 0, totalTree, totalBurned; 
     FILE *file;
     char filename[100];
     scanf("%s", filename);
@@ -171,11 +171,6 @@ int main(){
     fscanf(file, "%d", &cols);
     fscanf(file, "%d", &seed);
     fscanf(file, "%d", &probability);
-
-    printf("rows: %d\n", rows);
-    printf("cols: %d\n", cols);
-    printf("seed: %d\n", seed);
-    printf("probability: %d\n", probability);
 
     //Creates the 2d Array with dyanimic memory allocation
     int **numbers = (int **)malloc(rows * sizeof(int *));
@@ -209,13 +204,29 @@ int main(){
             populateForest(numbers, rows, cols);
         }
     }
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            if(numbers[i][j] == 1){
+                totalTree++;
+            }
+        }
+    }
 
     fclose(file);
     srand(seed);
 
     double prob = (double)probability / 100.0;
 
+    printf("rows: %d\n", rows);
+    printf("cols: %d\n", cols);
+    printf("totalTree: %d\n", totalTree);
+    printf("seed: %d\n", seed);
+    printf("probability: %d%%\n", probability);
+    printf("\nTime: %d\n", generation);
+
     printForest(numbers, rows, cols);
+    printf("\ntotal Burned: %d  (%.2f%%)\n\n", totalBurned, (double)totalBurned / totalTree * 100);
+
     while(count != 0){
         count = 0;
         nextGeneration(numbers, rows, cols, prob);
@@ -225,18 +236,30 @@ int main(){
                     count++;
                 }
             }
-            printf("\n Count: %d\n", count);
+            //printf("\n Count: %d\n", count);
         }
         generation++;
-        printForest(numbers, rows, cols);
         //pause();
 
     }
     
-    
-    
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            if(numbers[i][j] == 1){
+                totalBurned++;
+            }
+        }
+    }
+
+    int temp = totalBurned;
+    totalBurned = totalTree - totalBurned;
+
+    printf("\n<<<Final Forest>>>\n Time: %d\n", generation);
+    printForest(numbers, rows, cols);
+    printf("\ntotal Burned: %d  (%.2f%%)\n", totalBurned, (double)totalBurned / totalTree * 100);
+    printf("trees left: %d", temp);
     free(numbers);
-    pause();
+    //pause();
     return 0;
 
 }
